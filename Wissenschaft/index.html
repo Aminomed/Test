@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zoom ins Unbestimmte – Modelle & Erkenntnis in der Wissenschaft</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <!-- Three.js CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body>
+
+  <!-- Fullscreen WebGL 3D Background Canvas -->
+  <div id="webgl-container"></div>
+
+  <!-- TOP BAR WITH QUICK MODEL SWITCHER TABS -->
+  <header class="hud-top-bar">
+    <div class="hud-logo">
+      <span>⚛</span> WISSENSCHAFT <span>&</span> WIRKLICHKEIT
+    </div>
+
+    <!-- Quick Model Tabs -->
+    <nav class="model-quick-nav" aria-label="Modellauswahl">
+      <button class="tab-btn active" data-stage="0">0. Makro</button>
+      <button class="tab-btn" data-stage="1">1. Dalton</button>
+      <button class="tab-btn" data-stage="2">2. Rutherford</button>
+      <button class="tab-btn" data-stage="3">3. Bohr</button>
+      <button class="tab-btn" data-stage="4">4. Orbitale</button>
+      <button class="tab-btn" data-stage="5">5. Epilog</button>
+    </nav>
+
+    <div class="hud-actions">
+      <button id="btn-audio-toggle" class="hud-btn" title="Audio-Atmosphäre ein/ausschalten">
+        <span>🔇</span> Sound: Aus
+      </button>
+    </div>
+  </header>
+
+  <!-- FLOATING SIDEBAR TOGGLE BUTTON -->
+  <button id="btn-toggle-sidebar" class="sidebar-toggle-btn" title="Textleiste ein- oder ausblenden für freie Modellsicht">
+    <span>👁️</span> Fokus-Modus
+  </button>
+
+  <!-- 3D STAGE HINT (Top Right) -->
+  <div class="canvas-hint">
+    <span>🖱️</span> 3D-Modell mit Maus frei drehen & zoomen
+  </div>
+
+  <!-- 3D VIEWPORT CONTROLS (Bottom Right) -->
+  <div class="viewport-hud">
+    <div class="viewport-info-tag">
+      <span>Modell:</span>
+      <strong id="viewport-model-name">Makroskopische Flüssigkeit</strong>
+    </div>
+    <div class="control-pill">
+      <button id="btn-zoom-in" class="pill-btn" title="Vergrößern (+)">＋</button>
+      <button id="btn-zoom-out" class="pill-btn" title="Verkleinern (-)">－</button>
+      <button id="btn-reset-view" class="pill-btn" title="Ansicht zentrieren">⟲</button>
+      <button id="btn-autorotate" class="pill-btn" style="color: var(--accent-cyan);" title="Auto-Rotation umschalten">🔄</button>
+      <button id="btn-focus-mode" class="pill-btn" title="Textleiste ausblenden (Vollbild-Modell)">👁️</button>
+    </div>
+  </div>
+
+  <!-- BOTTOM LEFT METRICS HUD -->
+  <aside class="hud-metrics">
+    <div class="metric-row">
+      <span class="metric-label">Maßstab:</span>
+      <span id="hud-scale" class="metric-val">10⁰ m (1 Meter)</span>
+    </div>
+    <div class="metric-row">
+      <span class="metric-label">Epoche:</span>
+      <span id="hud-epoch" class="metric-val">Gegenwart (Makrowelt)</span>
+    </div>
+    <div class="metric-row">
+      <span class="metric-label">Paradigma:</span>
+      <span id="hud-paradigm" class="metric-val" style="color: var(--accent-purple);">Klassische Anschauung</span>
+    </div>
+    <div class="metric-progress">
+      <div id="hud-progress-bar" class="metric-progress-bar"></div>
+    </div>
+  </aside>
+
+  <!-- MAIN APPLICATION LAYOUT: LEFT SIDEBAR SCROLLYTELLING -->
+  <div class="app-layout">
+    
+    <aside id="story-sidebar" class="story-sidebar">
+
+      <!-- ================= STEP 0: PROLOG ================= -->
+      <section id="step-0" class="story-step">
+        <div class="compact-card">
+          <div class="card-tag">Erkenntnistheorie</div>
+          <h1 class="hero-card-title">Zoom ins Unbestimmte</h1>
+          
+          <div class="quote-box">
+            „Die Landkarte ist nicht das Territorium.“
+            <span class="quote-author">— Alfred Korzybski</span>
+          </div>
+
+          <div class="card-body">
+            <p>
+              Ein Wassertropfen erscheint uns stetig und glatt. Doch Wissenschaft ist die Geschichte eines ständigen Hineinzoomens – und des Scheiterns menschlicher Anschauung.
+            </p>
+            <p>
+              Wissenschaft liefert keine absoluten Dogmen, sondern <strong>Modelle</strong>: nützliche Denkwerkzeuge mit einem begrenzten <em>Geltungsbereich</em>.
+            </p>
+          </div>
+          <div style="font-size: 0.75rem; color: var(--text-highlight); margin-top: 0.5rem; display: flex; align-items: center; gap: 0.4rem;">
+            <span>↓</span> Scrolle, um in das nächste Modell zu zoomen
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= STEP 1: DALTON ================= -->
+      <section id="step-1" class="story-step">
+        <div class="compact-card">
+          <div class="card-tag">Stufe 1 • 1803 (Dalton)</div>
+          <h2 class="card-title">Die unteilbaren Kugeln</h2>
+          
+          <div class="card-body">
+            <p>
+              John Dalton formulierte: Atome sind starre, unteilbare Billardkugeln.
+            </p>
+            <p>
+              Dieses mechanistische Modell erklärt Aggregatzustände und Druck durch elastische Teilchenstöße hervorragend.
+            </p>
+          </div>
+
+          <div class="quote-box">
+            „Nichts existiert außer Atomen und leerem Raum.“
+            <span class="quote-author">— Demokrit</span>
+          </div>
+
+          <!-- Mini-Widget: Gas Law -->
+          <div class="interactive-widget">
+            <div class="widget-title">🧪 Gasdruck-Simulator</div>
+            <div class="control-group">
+              <div class="control-label">
+                <span>Temperatur ($T$)</span>
+                <span id="dalton-temp-val" class="metric-val">300 K</span>
+              </div>
+              <input id="dalton-temp" type="range" class="control-slider" min="100" max="800" value="300" step="10">
+            </div>
+            <div class="metric-row">
+              <span class="metric-label">Druck ($P$):</span>
+              <span id="dalton-pressure" class="metric-val">102.0 kPa</span>
+            </div>
+          </div>
+
+          <div class="model-stats">
+            <div class="stat-item">
+              <span class="stat-title">Stärke:</span>
+              <span class="stat-desc">Gasgesetze, Druck</span>
+              <span class="status-badge status-success">Geltungsbereich OK</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-title">Grenze:</span>
+              <span class="stat-desc">Elektrische Ladung?</span>
+              <span class="status-badge status-limit">Modell versagt</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= STEP 2: RUTHERFORD ================= -->
+      <section id="step-2" class="story-step">
+        <div class="compact-card">
+          <div class="card-tag">Stufe 2 • 1911 (Rutherford)</div>
+          <h2 class="card-title">Die Leere im Atom</h2>
+          
+          <div class="card-body">
+            <p>
+              Rutherford schoss Alpha-Teilchen auf Goldfolie: 99,99% flogen ungehindert durch das Vakuum des Atoms – doch <strong>1 von 8.000</strong> prallte frontal am dichten Atomkern ab!
+            </p>
+          </div>
+
+          <div class="quote-box">
+            „Als schöße man eine Granate auf Seidenpapier und sie käme zurück.“
+            <span class="quote-author">— Ernest Rutherford</span>
+          </div>
+
+          <!-- Mini-Widget: Gold Foil -->
+          <div class="interactive-widget">
+            <div class="widget-title">🎯 Goldfolien-Streuung</div>
+            <button id="btn-rutherford-fire" class="btn-action" style="width: 100%; margin-bottom: 0.5rem;">
+              Alpha-Teilchen abfeuern
+            </button>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.3rem; text-align: center; font-size: 0.7rem;">
+              <div style="background: rgba(255,255,255,0.04); padding: 0.3rem; border-radius: 0.3rem;">
+                <div style="color: var(--text-muted); font-size: 0.6rem;">DURCH</div>
+                <div id="count-passed" style="color: var(--accent-cyan); font-weight: 700;">0</div>
+              </div>
+              <div style="background: rgba(255,255,255,0.04); padding: 0.3rem; border-radius: 0.3rem;">
+                <div style="color: var(--text-muted); font-size: 0.6rem;">GESTREUT</div>
+                <div id="count-deflected" style="color: var(--accent-amber); font-weight: 700;">0</div>
+              </div>
+              <div style="background: rgba(255,255,255,0.04); padding: 0.3rem; border-radius: 0.3rem;">
+                <div style="color: var(--text-muted); font-size: 0.6rem;">REFLEKT</div>
+                <div id="count-reflected" style="color: var(--accent-rose); font-weight: 700;">0</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="model-stats">
+            <div class="stat-item">
+              <span class="stat-title">Erkenntnis:</span>
+              <span class="stat-desc">Winziger Kern, 99.999% Vakuum</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-title">Krise:</span>
+              <span class="stat-desc">Elektronen müssten abstürzen</span>
+              <span class="status-badge status-limit">Kollaps droht</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= STEP 3: BOHR ================= -->
+      <section id="step-3" class="story-step">
+        <div class="compact-card">
+          <div class="card-tag">Stufe 3 • 1913 (Bohr)</div>
+          <h2 class="card-title">Quantensprünge & Spektren</h2>
+          
+          <div class="card-body">
+            <p>
+              Niels Bohr postulierte: Elektronen dürfen nur auf diskreten, quantisierten Bahnen kreisen. Beim Bahnsprung entsteht ein Photon mit exakter Wellenlänge: $\Delta E = h \cdot \nu$.
+            </p>
+          </div>
+
+          <!-- Mini-Widget: Spectrum -->
+          <div class="interactive-widget">
+            <div class="widget-title">🌈 Spektrallinien & Bahnsprünge</div>
+            <div class="chip-group">
+              <button class="chip-btn bohr-jump-chip active" data-transition="3-2">$3 \to 2$ (Rot)</button>
+              <button class="chip-btn bohr-jump-chip" data-transition="4-2">$4 \to 2$ (Türkis)</button>
+              <button class="chip-btn bohr-jump-chip" data-transition="5-2">$5 \to 2$ (Blau)</button>
+              <button class="chip-btn bohr-jump-chip" data-transition="6-2">$6 \to 2$ (Violett)</button>
+            </div>
+
+            <div id="bohr-spectrum" class="spectrum-bar">
+              <div class="spectral-line active-spectral-line" style="left: 85%; background: #f43f5e; color: #f43f5e;"></div>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; font-size: 0.725rem;">
+              <span>Energie: <strong id="bohr-energy-val" style="color: var(--accent-cyan);">1.89 eV</strong></span>
+              <span>Welle: <strong id="bohr-wave-val" style="color: var(--accent-cyan);">656 nm</strong></span>
+            </div>
+          </div>
+
+          <div class="model-stats">
+            <div class="stat-item">
+              <span class="stat-title">Stärke:</span>
+              <span class="stat-desc">Erklärt Linienspektren</span>
+              <span class="status-badge status-success">Quantisiert</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-title">Grenze:</span>
+              <span class="stat-desc">Keine Mehr-Elektronen</span>
+              <span class="status-badge status-limit">Ad-hoc Modell</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= STEP 4: SCHRÖDINGER / ORBITALS ================= -->
+      <section id="step-4" class="story-step">
+        <div class="compact-card">
+          <div class="card-tag">Stufe 4 • 1925+ (Quantenmechanik)</div>
+          <h2 class="card-title">Das Ende der Anschauung</h2>
+          
+          <div class="card-body">
+            <p>
+              Das Elektron hat keine feste Bahn mehr. Die Wellenfunktion $\psi$ liefert als Betragsquadrat $|\psi|^2$ nur noch <strong>Aufenthaltswahrscheinlichkeiten</strong>.
+            </p>
+          </div>
+
+          <div class="quote-box">
+            „Die Naturwissenschaft beschreibt die Natur, wie sie unseren Fragen ausgesetzt ist.“
+            <span class="quote-author">— Werner Heisenberg</span>
+          </div>
+
+          <!-- Mini-Widget: Orbital Selector -->
+          <div class="interactive-widget">
+            <div class="widget-title">🌌 3D-Orbital-Inspektor</div>
+            <div class="chip-group">
+              <button class="chip-btn orbital-btn" data-orbital="1s">1s</button>
+              <button class="chip-btn orbital-btn" data-orbital="2s">2s</button>
+              <button class="chip-btn orbital-btn active" data-orbital="2pz">2p_z</button>
+              <button class="chip-btn orbital-btn" data-orbital="2px">2p_x</button>
+              <button class="chip-btn orbital-btn" data-orbital="3dz2">3d_{z²}</button>
+              <button class="chip-btn orbital-btn" data-orbital="3dxy">3d_{xy}</button>
+            </div>
+
+            <div style="margin-top: 0.6rem; padding: 0.5rem; background: rgba(0,0,0,0.4); border-radius: 0.4rem;">
+              <div id="orbital-current-name" style="font-weight: 700; color: #fff; font-size: 0.775rem;">2p_z Orbital (Hantelform)</div>
+              <div id="orbital-current-desc" style="font-size: 0.7rem; color: var(--text-muted); margin-top: 0.15rem;">
+                Zwei Keulen entlang der z-Achse, getrennt durch die xy-Knotenebene (z=0).
+              </div>
+              <div id="orbital-current-nodes" style="font-family: var(--font-mono); font-size: 0.68rem; color: var(--accent-cyan); margin-top: 0.25rem;">
+                1 Knotenebene (z=0)
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= STEP 5: EPILOG ================= -->
+      <section id="step-5" class="story-step">
+        <div class="compact-card">
+          <div class="card-tag">Epilog • Wissenschaftsphilosophie</div>
+          <h2 class="card-title">Was ist Wahrheit?</h2>
+          
+          <div class="quote-box">
+            „Alle Modelle sind falsch, aber manche sind nützlich.“
+            <span class="quote-author">— George E. P. Box</span>
+          </div>
+
+          <div class="card-body">
+            <p>
+              Kein Modell ist „wertlos“, solange man seinen Geltungsbereich kennt. Das einfachste Modell, das das Phänomen zuverlässig vorhersagt, ist das wissenschaftlich beste!
+            </p>
+          </div>
+
+          <!-- Mini-Widget: Model Compass -->
+          <div class="interactive-widget">
+            <div class="widget-title">🧭 Der Modell-Kompass</div>
+            <p style="font-size: 0.7rem; color: var(--text-muted);">
+              Wähle eine Fragestellung für das optimale Modell:
+            </p>
+
+            <div class="matrix-grid">
+              <div class="matrix-card" data-problem="tire">
+                <h4>🎈 Reifendruck berechnen</h4>
+                <p>Gasdruck bei 80°C</p>
+              </div>
+              <div class="matrix-card" data-problem="laser">
+                <h4>💡 Laserlicht & Spektren</h4>
+                <p>Monochromatische Photonen</p>
+              </div>
+              <div class="matrix-card" data-problem="water">
+                <h4>💧 Wasser-Bindung</h4>
+                <p>104.5° Dipol-Molekül</p>
+              </div>
+              <div class="matrix-card" data-problem="semiconductor">
+                <h4>💻 3nm Computer-Chip</h4>
+                <p>Quanten-Tunneleffekt</p>
+              </div>
+            </div>
+
+            <div id="compass-result" style="display: none; margin-top: 0.6rem; padding: 0.6rem; background: rgba(56, 189, 248, 0.12); border: 1px solid var(--accent-cyan); border-radius: 0.4rem;">
+              <h4 id="compass-result-title" style="color: #fff; font-size: 0.775rem;"></h4>
+              <div id="compass-result-model" style="font-weight: 700; color: var(--accent-cyan); font-size: 0.75rem; margin-top: 0.2rem;"></div>
+              <div id="compass-result-reason" style="font-size: 0.7rem; color: var(--text-main); margin-top: 0.25rem;"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </aside>
+
+  </div>
+
+  <!-- Main JavaScript App Entry Point -->
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
